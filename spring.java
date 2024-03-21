@@ -6,6 +6,7 @@ Bean
 
 //注入依赖(@autowired)是实现属性，初始化是实现方法,  *********************只有autowired注解才可以用到构造方法上  @autowired   ****************
 @Component
+@Configuration //***************Configuration注解，自动加入代理对象（动态代理），先走代理逻辑   -------   底层用的CGLIB   --------- 动态代理，代理对象（super）
 public class UserService{
   private OrderService orderService;
 
@@ -15,14 +16,14 @@ public class UserService{
   @Transactional
   public void test(){
     jdbcTemplate.execute(sql:"insert into t1 values(6,6,4,4,'f')");  //此时因为是JdbcTemplate.execute方法，和spring没有关系，不在spring的控制之下，所以必须AOP，执行切面逻辑，将autocommit = true（自动提交） 改为  false，将sql变为在spring的控制之下
-    throw new NullPointerException();  //抛出异常就不可以回滚          //用的是spring创建的数据库连接
+    throw new NullPointerException();  //抛出异常数据库要回滚ROLLBACK，取消刚才数据库的操作         //用的是spring创建的数据库连接
     a();  //new UserService().a()  用的普通对象的方法
     //AOP后，执行***spring事务***的切面逻辑
     //解析注解,代理方法去解析
-    //新建一个数据库连接connection  ThrealLocal放置创建的连接   有一个扩展机制
+    //新建一个数据库连接connection  ThrealLocal<Map<DataSource对象，connection>>放置创建的连接,Map解决多数据元的问题K-V   有一个扩展机制
     //connection.autocommit = false;
 
-    //target.test   //jdbcTemplate conn 执行SQL
+    //target.test   //jdbcTemplate 在threadLocal中找到  conn 执行SQL
     //conn.commit()  conn.rollback()
   }
   //*********方法的注解会不会被解析，会不会有用，看是什么对象调用的，如果是代理对象调用的则有用（spring事务触发），如果是普通对象调用的，则没有太大的关系
