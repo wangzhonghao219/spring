@@ -10,9 +10,10 @@ public class UserService{
   private OrderService orderService;
 
   public UserService(OrderService orderService1){  //构造方法  OrderServiced对象来源自Map<BeanName, Bean对象>（byType，根据类型去找），Map没有则 ------->创建Bean对象（必须有Component注解），若无Component注解声明对象为Bean对象，则传递失败，spring也不返回null
-    this.orderService = orderService1;             //若无Component注解声明对象为Bean对象，则传递失败，spring也不返回null,会报错，因为这是构造方法，表示强制依赖，*****注意循环依赖，加Lazy注解解决
-    System.out.println(1);                        //hashmap<>  key唯一  value不唯一    Map<BeanName,Bean对象>  *******先ByType ---------> 再ByName*************,***如果只有一个Type的Bean对象，就不用再ByName了，有多个则必确明确指出BeanName
+    this.orderService = orderService1;             //若无Component注解声明对象为Bean对象，则传递失败，spring也不返回null,会报错，因为这是构造方法---> 强制依赖，*****注意循环依赖，加Lazy注解解决
+    System.out.println(1);                        //hashmap<>  key唯一  value不唯一    Map<BeanName,Bean对象>  *******先ByType (如果找到多个) ---------> 再ByName*************,***如果只有一个Type的Bean对象，就不用再ByName了，有多个则必确明确指出BeanName
   }
+  public void test(){}
 }
 
 
@@ -29,17 +30,34 @@ public class OrderService{
     return new OrderService()
   }
 }
-
+//main()
+AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 //单例Bean   单例模式   orderservice1,2,3都是单例Bean，对应的名字是单例Bean，而不是对应类是单例Bean
 applicationContext,getBean(name:"orderservice1"); 
 applicationContext,getBean(name:"orderservice2"); 
 applicationContext,getBean(name:"orderservice3"); 
 
+//依赖注入的地方，无论是构造注入，字段注入，接口注入（看实现类是什么情况，都是找bean对象），还是Set方法注入，都是先byname再bytype，这是@Autowired注解，@Resource相反，先byname再bytype
 
+//AOP  切面注解定义    *****CGLIB,基于继承，会针对UserService类生成***代理类***，即class UserServiceProxy extends UserService {}
+@Aspect//切面
+@Component
+public class WzhAspect{
 
-
-
-
+  @Before("execution(public void com.Wzh.service.UserService.test())")//切一下UserService的test方法
+  public void wzhBefore(JoinPoint joinPoint){
+    System.out.println("wzh-nb");  //先执行前面切面（Before）的逻辑，再执行UserService的逻辑
+  }
+}
+//UserService代理对象，即UserSerciceProxy类,***************但是spring不对代理对象进行依赖注入
+//UserService代理对象.test()方法
+class UserServiceProxy extends UserService {
+  //重写UserService类的test方法
+  public void test(){
+    //执行切面逻辑，但是与orderservice的属性无关，因为代理对象没有进行依赖注入
+    //super.test()  调用后会打印orderservice属性，但是打印的代理对象的orderService属性，是没有值的
+  }
+}
 
 
 
