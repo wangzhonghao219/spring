@@ -39,7 +39,7 @@ applicationContext,getBean(name:"orderservice3");
 
 //依赖注入的地方，无论是构造注入，字段注入，接口注入（看实现类是什么情况，都是找bean对象），还是Set方法注入，都是先byname再bytype，这是@Autowired注解，@Resource相反，先byname再bytype
 
-//AOP  切面注解定义    *****CGLIB,基于继承，会针对UserService类生成***代理类***，即class UserServiceProxy extends UserService {}
+//AOP  切面注解定义    *****CGLIB,基于继承*******，会针对UserService类生成***代理类***，即class UserServiceProxy extends UserService {}
 @Aspect//切面
 @Component
 public class WzhAspect{
@@ -47,15 +47,21 @@ public class WzhAspect{
   @Before("execution(public void com.Wzh.service.UserService.test())")//切一下UserService的test方法
   public void wzhBefore(JoinPoint joinPoint){
     System.out.println("wzh-nb");  //先执行前面切面（Before）的逻辑，再执行UserService的逻辑
+    //joinPoint会执行两个方法，一个是joinPoint.getTarget()拿到普通对象,  另一个是joinPoint.this()拿到代理对象
   }
 }
-//UserService代理对象，即UserSerciceProxy类,***************但是spring不对代理对象进行依赖注入
+//UserService代理对象，先生成代理类，即UserSerciceProxy类,***************但是spring不对代理对象进行依赖注入
 //UserService代理对象.test()方法
+//UserSerciceProxy对象==UserService代理对象------->UserService代理对象.target = 普通对象（一开始就创建出来的，代理对象代理的就是普通对象）
 class UserServiceProxy extends UserService {
-  //重写UserService类的test方法
+
+  UserService target;
+  //重写UserService类的test方法，AOP执行普通对象的逻辑之前额外执行一些逻辑  ==》加强版的test方法
+  
   public void test(){
-    //执行切面逻辑，但是与orderservice的属性无关，因为代理对象没有进行依赖注入
-    //super.test()  调用后会打印orderservice属性，但是打印的代理对象的orderService属性，是没有值的
+    //执行切面逻辑，但是与orderservice的属性无关，因为代理对象没有进行依赖注入（不赋值），精髓是额外执行的切面逻辑
+    //target.test();    //target对象的属性，就是UserService普通对象的的属性（有值，因为经过了依赖注入）
+    //super.test();    //调用后会打印orderservice属性，但是打印的代理对象的orderService属性，是没有值的
   }
 }
 
