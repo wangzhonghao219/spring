@@ -7,6 +7,7 @@ Bean
 //注入依赖(@autowired)是实现属性，初始化是实现方法,  *********************只有autowired注解才可以用到构造方法上  @autowired   ****************
 @Component
 @Configuration //***************Configuration注解，自动加入代理对象（动态代理），先走代理逻辑   -------   底层用的CGLIB   --------- 动态代理，代理对象（super）
+//AOP产生的代理对象产生的target对象即普通对象，Configuration动态代理产生的是代理对象，调用的super方法
 public class UserService{
   private OrderService orderService;
 
