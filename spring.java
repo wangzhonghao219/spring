@@ -38,7 +38,7 @@ public class UserService{
     this.orderService = orderService1;             //若无Component注解声明对象为Bean对象，则传递失败，spring也不返回null,会报错，因为这是构造方法---> 强制依赖，*****注意循环依赖，加Lazy注解解决
     System.out.println(1);                        //hashmap<>  key唯一  value不唯一    Map<BeanName,Bean对象>  *******先ByType (如果找到多个) ---------> 再ByName*************,***如果只有一个Type的Bean对象，就不用再ByName了，有多个则必确明确指出BeanName
   }
-  //public void test(){}//执行普通对象
+  //public void test(){}//执行普通对象 
 }
 
 
