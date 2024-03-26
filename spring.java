@@ -58,9 +58,9 @@ public class OrderService{
 //main()
 AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 //单例Bean   单例模式   orderservice1,2,3都是单例Bean，对应的名字是单例Bean，而不是对应类是单例Bean
-applicationContext,getBean(name:"orderservice1"); 
-applicationContext,getBean(name:"orderservice2"); 
-applicationContext,getBean(name:"orderservice3"); 
+//applicationContext,getBean(name:"orderservice1"); 
+//applicationContext,getBean(name:"orderservice2"); 
+//applicationContext,getBean(name:"orderservice3"); 
 
 //依赖注入的地方，无论是构造注入，字段注入，接口注入（看实现类是什么情况，都是找bean对象），还是Set方法注入，都是先byname再bytype，这是@Autowired注解，@Resource相反，先byname再bytype
 
