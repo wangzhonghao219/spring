@@ -37,7 +37,19 @@ public interface WebServer{
     public void start();
 }
 
-public
+public class TomcatWebServer implements WebServer{
+  @override
+  public void start(){
+    //启动tomcat
+  }
+}
+
+public class JettyWebServer implements WebServer{
+  @override
+  public void start(){
+    //启动Jetty
+  }
+}
 
 //定义注解；
 @Target(ElementType.TYPE)
