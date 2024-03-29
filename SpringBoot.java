@@ -1,5 +1,5 @@
  //springboot启动类(SpringBootApplication)---->OrderService普通对象（不是bean）------>Controller类(RestController)--------->Service类(Component)
-//启动类(springboot启动的过程就是扫描的过程，扫描是最耗时的操作，于是3.0版本把扫描的动作放到了编译期，产生三个文件，比如sourceOutput，里面是扫描到的bean)，spring boot在做整合，是基于spring的,运行时处理逻辑和解析注解
+//启动类(springboot启动的过程就是扫描的过程，扫描是最耗时的操作，于是3.0版本的特性AOT把扫描的动作放到了编译期，产生三个文件，比如sourceOutput，里面是扫描到的bean)，spring boot在做整合，是基于spring的,运行时处理逻辑和解析注解
 @WzhSpringBootApplication
 //@Import( WebServerAutoConfiguration.class)
 //@ConponentScan("com.Wzh")  //可以转移到WzhSpringBootApplication的注解定义类中区,扫描很耗费性能
