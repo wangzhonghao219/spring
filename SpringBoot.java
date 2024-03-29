@@ -1,4 +1,4 @@
-//启动类，spring boot在做整合，是基于spring的
+//启动类，spring boot在做整合，是基于spring的,运行时处理逻辑和解析注解
 @WzhSpringBootApplication
 //@Import( WebServerAutoConfiguration.class)
 //@ConponentScan("com.Wzh")  //可以转移到WzhSpringBootApplication的注解定义类中区,扫描很耗费性能
@@ -97,11 +97,11 @@ public class UserController{
   }
   
 }
-
-@Configuration  //自动配置
-public class WebServerAutoConfiguration{
-  @Bean
-  @Conditional(TomcatCondition.class)//条件注解
+//真正的springboot默认依赖Tomcat，在spring-boot-starter-web中，自动配置是批量将自动配置类导入到string数组（放入的是类名），批量导入的功能
+@Configuration  //自动配置,改造POM文件，在Tomcat和jetty的依赖中添加<optional>true<optional>可以禁止依赖传递，但是是在springboot的pom文件中
+public class WebServerAutoConfiguration{     //自动配置configuration   not   自动装配autowired（注入依赖）
+  @Bean                                      //自动配置可以帮助我们定义了一些相关的bean，*******spring不会这样，这是spring和springboot的区别，可以在整合中自动帮我们定义一些bean，比如sqlsessionfactory
+  @Conditional(TomcatCondition.class)//条件注解                  //而spring需要我们手动去定义这些bean
   public TomcatWebServer tomcatWebServer(){
     retunr new TomcatWebServer();
   }
