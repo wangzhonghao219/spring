@@ -18,10 +18,15 @@
     5.DispatcherServlet对象.init()方法  ------>    创建spring子容器（独立的，有几个DispatcherServlet就有几个spring容器） ---> CreateWebApplicationContext()  
         ---->   configerAndRefresWebApplicationContext(wav)方法启动spring容器（解析spring.xml文件），创建每个子容器都会绑定父容器
     
-  tomcat只会调用service方法，比如说请求是GET，调用doGET方法，请求是post就调用doPOST方法
+  处理请求时候，tomcat只会调用service方法，比如说请求是GET，调用doGET方法，请求是post就调用doPOST方法
 
-
-    
+  spring MVC  ---->   Handler  请求处理器  @RequestMapping方法  或    Controller对象
+  HandlerMapping :   Map<path,Handler>
+  有优先级的  HandlerMapping
+  BeanNameUrlHandlerMapping      Map<path, Controller对象>
+  RequestMappingHandlerMapping   Map<path, @RequestMapping方法>  
+  RouterFunctionMapping          Map<path, @RequestMapping方法>
+  
     pom.xml文件配置
       servlet-mapping
 
